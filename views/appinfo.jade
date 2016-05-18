@@ -1,0 +1,16 @@
+extends layout
+
+block content
+	style.
+		label input {display:block;}
+		
+	form.content(method="POST")
+		h3= "App Info"
+		label="Client ID"
+			input(name="clientId")
+		label="Consumer Key"
+			input(name="consumerKey")
+		label="Consumer Secret"
+			input(name="consumerSecret")
+		input(type="submit", value="Submit")
+				
