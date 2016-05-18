@@ -1,5 +1,22 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+	h1= title
+	div.content
+		h4= "1. Auth Code"
+		button(onclick="auth();")= "Get Auth Code"
+		label= "Auth code: "
+			input(style="width:300px;")#auth-code
+
+		h4= "2. Token"
+		button(onclick="tokenize();")= "Get Token"
+		pre#response-status.response-header
+		pre#response
+		
+		h4= "3. Heart Rate"
+		pre#heartrate-status.response-header
+		pre#heartrate
+			|(results will appear here)
+
+	script(src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js")
+	script(src="/javascripts/HeartBit.js")
