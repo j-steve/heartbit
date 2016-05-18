@@ -7,7 +7,10 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/', function(req, res, next) {
-	res.send(req.body.clientId);
+	res.cookie('clientId', req.body.clientId);
+	res.cookie('consumerKey', req.body.consumerKey);
+	res.cookie('consumerSecret', req.body.consumerSecret);
+	res.redirect("/");
 });
 
 module.exports = router;
