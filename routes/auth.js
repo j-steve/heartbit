@@ -12,9 +12,9 @@ router.get('/', function(req, res, next) {
 			redirect_uri: 'http://heart-bit.herokuapp.com/auth',
 			expires_in: 2592000
 		});
-		res.redirect('https://www.fitbit.com/oauth2/authorize?' + fitbitAuthData)
+		res.redirect('https://www.fitbit.com/oauth2/authorize?' + fitbitAuthData);
 	} else { 
-		res.cookie('authCode', req.query.code);
+		res.cookie('authCode', req.query.code, {maxAge: 2592000});
 		res.redirect('/');
 	}
 });

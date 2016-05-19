@@ -18,7 +18,7 @@ router.get('/', function(req, res, next) {
 	};
 	request.post(options, function(err, response, body) {
 		if (err) {return next(err);}
-		res.send(JSON.stringify(response, null, 2));
+		res.send(JSON.stringify({response: response, body:body}, null, 2));
 	});
 });
 
