@@ -57,9 +57,10 @@ app.use(function(err, req, res, next) {
 		};
 		codeSnippets.push(snippet);
 	}	
+	console.log(err);
 	res.status(err.status || 500);
 	res.render('error', {
-		message : err.message || err,
+		message : err.message || err.toString(),
 		error : app.get('env') === 'development' ? err : null,
 		codeSnippets: codeSnippets
 	});
