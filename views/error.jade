@@ -38,4 +38,4 @@ append content
 				span(style="background:rgb(255, 255, 180);") #{snippet.lineNo + snippet.lines[snippet.lineNo] + '\n'}
 				|#{snippet.lineNo+1 + snippet.lines[snippet.lineNo+1] + '\n'}
 	h2="Stacktrace:"
-	pre #{error.stack}
+	pre #{error && error.stack}
