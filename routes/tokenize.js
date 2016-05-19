@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var request = require('request');
+var request = require('btoa');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {

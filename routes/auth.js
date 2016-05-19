@@ -9,7 +9,7 @@ router.get('/', function(req, res, next) {
 			client_id: req.cookies.clientId,
 			response_type: 'code',
 			scope: 'heartrate',
-			redirect_uri: 'http://www.heart-bit.herokuapp.com/auth',
+			redirect_uri: 'http://heart-bit.herokuapp.com/auth',
 			expires_in: 2592000
 		});
 		res.redirect('https://www.fitbit.com/oauth2/authorize?' + fitbitAuthData)
