@@ -18,7 +18,12 @@ router.get('/', function(req, res, next) {
 	};
 	request.post(options, function(err, response, body) {
 		if (err) {return next(err);}
-		res.send(JSON.stringify({response: response, body:body}, null, 2));
+		if (response.statusCode !== 200) {return next(body);}
+		var token = body.token_type + ' ' + body.access_token;
+		var expiration = {maxAge: body.expires_in};
+		res.cookie('token', token, expiration);
+		res.cookie('refreshToken', body.refresh_token, expiration);
+		res.redirect('/');
 	});
 });
 

@@ -1,0 +1,10 @@
+extends layout
+
+block content
+	style.
+		label input {display:block;}
+		
+	form.content(method="POST")
+		h3= "Heartrate"
+		pre= {JSON.stringify(heartrateData, null, 2);}
+				

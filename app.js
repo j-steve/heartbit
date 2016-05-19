@@ -24,7 +24,8 @@ app.use('/', require('./routes/index'));
 app.use('/auth',  require('./routes/auth'));
 app.use('/tokenize', require('./routes/tokenize'));
 app.use('/appinfo',  require('./routes/appinfo'));
-app.use('/users',  require('./routes/users'));
+app.use('/heartrate',  require('./routes/heartrate'));
+app.use('/info',  require('./routes/info'));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

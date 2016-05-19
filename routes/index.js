@@ -11,7 +11,7 @@ router.get('/', function(req, res, next) {
 	} else if (!req.cookies.token) {
 		res.redirect('tokenize');
 	} else {
-		res.render('index', { title: 'HeartBit' });
+		res.redirect('heartrate');
 	}
 });
 
