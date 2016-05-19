@@ -9,7 +9,7 @@ router.get('/', function(req, res, next) {
 	var dateStr = targetDate.toISOString().substr(0, 10);
 	var options = {
 		url: 'https://api.fitbit.com/1/user/-/activities/heart/date/' + dateStr + '/1d/1sec.json',
-		headers: {'Authorization': req.cookies.token}
+		headers: {'Authorization': req.cookies.authToken}
 	};
 	request.get(options, function(err, response, body) {
 		if (err) {return next(err);}
