@@ -4,10 +4,10 @@ block content
 	style.
 		label input {display:block; width:230px;}
 	
-	h6= "Authorized, redirecting..."
+	h5= "Authorized, redirecting..."
 	form(method="POST")#form
 		input(type="hidden", name="authTokenData")#authTokenData
 
 	script.
 		document.getElementById('authTokenData').value = window.location.hash.substring(1);
-		setTimeout(function() {document.getElementById('form').submit();}, 5000);
+		setTimeout(function() {document.getElementById('form').submit();}, 1000);

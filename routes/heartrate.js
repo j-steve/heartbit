@@ -14,7 +14,8 @@ router.get('/', function(req, res, next) {
 	request.get(options, function(err, response, body) {
 		if (err) {return next(err);}
 		if (response.statusCode !== 200) {return next(body);}
-		res.render('heartrate', {heartrateData: body});
+		res.locals.heartrateData = JSON.stringify(JSON.parse(body), null, 2);
+		res.render('heartrate');
 	});
 	
 	
