@@ -12,8 +12,7 @@ router.get('/', function(req, res, next) {
 		form: {
 			client_id: req.cookies.clientId,
 			grant_type: 'authorization_code',
-			code: req.cookies.authCode,
-			redirect_uri: 'http://heart-bit.herokuapp.com/auth'
+			code: req.cookies.authCode
 		}
 	};
 	request.post(options, function(err, response, body) {
