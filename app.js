@@ -45,22 +45,24 @@ var errLine = /at (?:([^(\/\\]+) \()?(.+):(\d+):(\d+)(?:\))?/g;
 app.use(function(err, req, res, next) {
 	var match;
 	var codeSnippets = [];
-	while ((match = errLine.exec(err.stack))) {
-		var file = new File(match[2]);
-		var snippet = {
-			functionName: match[1],
-			filePath: file.path,
-			fileName: file.name,
-			lineNo: match[3] - 1,
-			isLib: file.path.indexOf('node_modules') > -1,
-			lines: file.existsSync() ? file.readLinesSync() : []
-		};
-		codeSnippets.push(snippet);
-	}	
+	if (err && err.stack) {
+		while ((match = errLine.exec(err.stack))) {
+			var file = new File(match[2]);
+			var snippet = {
+				functionName: match[1],
+				filePath: file.path,
+				fileName: file.name,
+				lineNo: match[3] - 1,
+				isLib: file.path.indexOf('node_modules') > -1,
+				lines: file.existsSync() ? file.readLinesSync() : []
+			};
+			codeSnippets.push(snippet);
+		}
+	}
 	console.log(err);
-	res.status(err.status || 500);
+	res.status(err && err.status || 500);
 	res.render('error', {
-		message : err.message || err.toString(),
+		message : err ? err.message || err.toString() : '',
 		error : app.get('env') === 'development' ? err : null,
 		codeSnippets: codeSnippets
 	});
