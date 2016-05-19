@@ -4,6 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var File = require('./lib/File');
 
 var app = express();
 
@@ -35,27 +36,28 @@ app.use(function(req, res, next) {
 });
 
 // error handlers
-
-// development error handler
-// will print stacktrace
-if (app.get('env') === 'development') {
-  app.use(function(err, req, res, next) {
-    res.status(err.status || 500);
-    res.render('error', {
-      message: err.message,
-      error: err
-    });
-  });
-}
-
-// production error handler
-// no stacktraces leaked to user
+var errLine = /at (?:([^(\/\\]+) \()?(.+):(\d+):(\d+)(?:\))?/g;
 app.use(function(err, req, res, next) {
-  res.status(err.status || 500);
-  res.render('error', {
-    message: err.message,
-    error: {}
-  });
+	var match;
+	var codeSnippets = [];
+	while ((match = errLine.exec(err.stack))) {
+		var file = new File(match[2]);
+		var snippet = {
+			functionName: match[1],
+			filePath: file.path,
+			fileName: file.name,
+			lineNo: match[3] - 1,
+			isLib: file.path.indexOf('node_modules') > -1,
+			lines: file.existsSync() ? file.readLinesSync() : []
+		};
+		codeSnippets.push(snippet);
+	}	
+	res.status(err.status || 500);
+	res.render('error', {
+		message : err.message || err,
+		error : app.get('env') === 'development' ? err : null,
+		codeSnippets: codeSnippets
+	});
 });
 
 
