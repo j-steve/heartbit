@@ -9,7 +9,7 @@ router.get('/', function(req, res, next) {
 	var options = {
 		url: 'https://api.fitbit.com/oauth2/token',
 		headers: {'Authorization': 'Basic ' + authToken},
-		body: {
+		form: {
 			client_id: req.cookies.clientId,
 			grant_type: 'authorization_code',
 			code: req.cookies.authCode,
