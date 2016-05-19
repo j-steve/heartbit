@@ -16,8 +16,9 @@ router.get('/', function(req, res, next) {
 			redirect_uri: 'http://heart-bit.herokuapp.com'
 		}
 	};
-	request.post(options, function(err, response, body) { 
-		res.send(JSON.stringify(response.responseJSON, null, 2));
+	request.post(options, function(err, response, body) {
+		if (err) {return next(err);}
+		res.send(JSON.stringify(response, null, 2));
 	});
 });
 
