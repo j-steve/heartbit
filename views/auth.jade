@@ -10,4 +10,5 @@ block content
 
 	script.
 		document.getElementById('authTokenData').value = window.location.hash.substring(1);
+		window.location.hash = ' ';
 		setTimeout(function() {document.getElementById('form').submit();}, 1000);
