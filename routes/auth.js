@@ -10,9 +10,11 @@ router.get('/', function(req, res, next) {
 router.post('/', function(req, res, next) {
 	var tokenData = qs.parse(req.body.authTokenData);
 	var token = tokenData.token_type + ' ' + tokenData.access_token;
-	var maxAgeSecs = +tokenData.expires_in;
+	var maxAgeSecs = 0+tokenData.expires_in;
 	res.cookie('authToken', token, {maxAge: maxAgeSecs});
-	res.redirect(tokenData.state);
+	
+	var rdUrl = decodeURIComponent(tokenData.state);
+	res.redirect(rdUrl);
 });
 
 module.exports = router;

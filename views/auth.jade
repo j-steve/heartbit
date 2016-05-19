@@ -6,7 +6,7 @@ block content
 	
 	h6= "Authorized, redirecting..."
 	form(method="POST")#form
-		input(type=hidden)#authTokenData
+		input(type="hidden", name="authTokenData")#authTokenData
 
 	script.
 		document.getElementById('authTokenData').value = window.location.hash.substring(1);
