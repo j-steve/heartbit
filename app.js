@@ -4,7 +4,6 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var File = require('si-file');
 
 
 var OAuth = require('./lib/OAuth');
@@ -34,7 +33,7 @@ app.use(OAuth);
 app.use('/heartrate',  require('./routes/heartrate'));
 
 
-// catch 404 and forward to error handler
+// Catch 404 and forward to main error handler.
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
   err.status = 404;
@@ -42,32 +41,6 @@ app.use(function(req, res, next) {
 });
 
 // error handlers
-var errLine = /at (?:([^(\/\\]+) \()?(.+):(\d+):(\d+)(?:\))?/g;
-app.use(function(err, req, res, next) {
-	var match;
-	var codeSnippets = [];
-	if (err && err.stack) {
-		while ((match = errLine.exec(err.stack))) {
-			var file = new File(match[2]);
-			var snippet = {
-				functionName: match[1],
-				filePath: file.path,
-				fileName: file.name,
-				lineNo: match[3] - 1,
-				isLib: file.path.indexOf('node_modules') > -1,
-				lines: file.existsSync() ? file.readLinesSync() : []
-			};
-			codeSnippets.push(snippet);
-		}
-	}
-	console.log(err);
-	res.status(err && err.status || 500);
-	res.render('error', {
-		message : err ? err.message || err.toString() : '',
-		error : app.get('env') === 'development' ? err : null,
-		codeSnippets: codeSnippets
-	});
-});
-
+app.use(require('./routes/error'));
 
 module.exports = app;
