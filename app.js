@@ -4,9 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-
-
-var OAuth = require('./lib/OAuth');
+var lessMiddleware = require('less-middleware');
 
 var app = express();
 
@@ -18,20 +16,16 @@ app.set('view engine', 'jade');
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
-app.use(require('less-middleware')(path.join(__dirname, 'public')));
+app.use(lessMiddleware(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', require('./routes/index'));
 app.use('/info',  require('./routes/info'));
-
 app.use('/appinfo',  require('./routes/appinfo'));
 app.use('/auth',  require('./routes/auth'));
-app.use(OAuth);
-
-app.use('/heartrate',  require('./routes/heartrate'));
-
+app.use('/o', require('./routes/oauth'));
 
 // Catch 404 and forward to main error handler.
 app.use(function(req, res, next) {

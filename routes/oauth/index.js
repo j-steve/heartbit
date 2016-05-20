@@ -1,7 +1,7 @@
-var app = require('express')();
+var router = require('express').Router();
 var querystring = require('querystring');
 
-app.use(function(req, res, next) {
+router.use(function(req, res, next) {
 	if (!req.cookies.clientId || !req.cookies.consumerKey || !req.cookies.consumerSecret) {
 		res.redirect('appinfo');
 	} else if (!req.cookies.authToken) { 
@@ -11,7 +11,7 @@ app.use(function(req, res, next) {
 			scope: 'heartrate',
 			redirect_uri: 'http://heart-bit.herokuapp.com/auth',
 			expires_in: 2592000,
-			state: req.originalUrl
+			state: req.url
 		});
 		res.redirect('https://www.fitbit.com/oauth2/authorize?' + fitbitAuthData);
 	} else {
@@ -19,4 +19,6 @@ app.use(function(req, res, next) {
 	}
 });
 
-module.exports = app;
+router.use('/heartrate', require('./heartrate'));
+
+module.exports = router;
