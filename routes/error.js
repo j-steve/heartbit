@@ -11,22 +11,32 @@ module.exports = function(err, req, res, next) {
 		var match;
 		while ((match = ERROR_LINE.exec(err.stack))) {
 			var file = new File(match[2]);
-			var snippet = {
+			var fileExists = file.existsSync();
+			var e = {
 				functionName: match[1],
 				filePath: file.path,
 				fileName: file.name,
 				lineNo: match[3] - 1,
-				isLib: isExternalCode(file),
-				lines: file.existsSync() ? file.readLinesSync() : []
+				colNo: match[4] - 1,
+				isLib: true
 			};
-			codeSnippets.push(snippet);
+			if (file.existsSync()) {
+				e.isLib = isExternalCode(file);
+				e.lines = file.readLinesSync();
+				e.targetLine = e.lines[e.lineNo];
+				e.beforeErr = e.targetLine.substring(0, e.colNo);
+				e.afterErr = e.targetLine.substr(e.colNo);
+			}
+			codeSnippets.push(e);
 		}
 	}
-	console.log(err);
+	var errMsg =  err ? err.message || err.toString() : '';
+	console.error('ERROR: ' + errMsg);
+	
 	res.status(err && err.status || 500);
 	res.render('error', {
-		message : err ? err.message || err.toString() : '',
-		error : app.get('env') === 'development' ? err : null,
+		message : errMsg,
+		error : err,
 		codeSnippets: codeSnippets
 	});
 };
