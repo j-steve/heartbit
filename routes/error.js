@@ -11,23 +11,23 @@ module.exports = function(err, req, res, next) {
 		var match;
 		while ((match = ERROR_LINE.exec(err.stack))) {
 			var file = new File(match[2]);
-			var fileExists = file.existsSync();
-			var e = {
+			var snippet = {
 				functionName: match[1],
 				filePath: file.path,
 				fileName: file.name,
 				lineNo: match[3] - 1,
-				colNo: match[4] - 1,
-				isLib: true
+				isLib: false,
+				lines: []
 			};
 			if (file.existsSync()) {
-				e.isLib = isExternalCode(file);
-				e.lines = file.readLinesSync();
-				e.targetLine = e.lines[e.lineNo];
-				e.beforeErr = e.targetLine.substring(0, e.colNo);
-				e.afterErr = e.targetLine.substr(e.colNo);
+				snippet.isLib = isExternalCode(file);
+				snippet.lines = file.readLinesSync();
+				var errLine = snippet.lines[snippet.lineNo];
+				var colNo = match[4] - 1;
+				snippet.beforeErr = errLine.substring(0, colNo);
+				snippet.afterErr = errLine.substring(colNo);
 			}
-			codeSnippets.push(e);
+			codeSnippets.push(snippet);
 		}
 	}
 	var errMsg =  err ? err.message || err.toString() : '';
