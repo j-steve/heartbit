@@ -4,10 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var File = require('si-file');
-
-
-var OAuth = require('./lib/OAuth');
+var lessMiddleware = require('less-middleware');
 
 var app = express();
 
@@ -19,55 +16,24 @@ app.set('view engine', 'jade');
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
-app.use(require('less-middleware')(path.join(__dirname, 'public')));
+app.use(lessMiddleware(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', require('./routes/index'));
 app.use('/info',  require('./routes/info'));
-
 app.use('/appinfo',  require('./routes/appinfo'));
 app.use('/auth',  require('./routes/auth'));
-app.use(OAuth);
+app.use('/o', require('./routes/oauth'));
 
-app.use('/heartrate',  require('./routes/heartrate'));
-
-
-// catch 404 and forward to error handler
+// Catch 404 and forward to main error handler.
 app.use(function(req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
+  res.status = 404;
+  res.render('404');
 });
 
 // error handlers
-var errLine = /at (?:([^(\/\\]+) \()?(.+):(\d+):(\d+)(?:\))?/g;
-app.use(function(err, req, res, next) {
-	var match;
-	var codeSnippets = [];
-	if (err && err.stack) {
-		while ((match = errLine.exec(err.stack))) {
-			var file = new File(match[2]);
-			var snippet = {
-				functionName: match[1],
-				filePath: file.path,
-				fileName: file.name,
-				lineNo: match[3] - 1,
-				isLib: file.path.indexOf('node_modules') > -1,
-				lines: file.existsSync() ? file.readLinesSync() : []
-			};
-			codeSnippets.push(snippet);
-		}
-	}
-	console.log(err);
-	res.status(err && err.status || 500);
-	res.render('error', {
-		message : err ? err.message || err.toString() : '',
-		error : app.get('env') === 'development' ? err : null,
-		codeSnippets: codeSnippets
-	});
-});
-
+app.use(require('./routes/error'));
 
 module.exports = app;

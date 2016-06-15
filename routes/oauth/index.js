@@ -1,9 +1,9 @@
-var app = require('express')();
+var router = require('express').Router();
 var querystring = require('querystring');
 
-app.use(function(req, res, next) {
+router.use(function(req, res, next) {
 	if (!req.cookies.clientId || !req.cookies.consumerKey || !req.cookies.consumerSecret) {
-		res.redirect('appinfo');
+		res.redirect('/appinfo');
 	} else if (!req.cookies.authToken) { 
 		var fitbitAuthData = querystring.stringify({
 			client_id: req.cookies.clientId,
@@ -19,4 +19,10 @@ app.use(function(req, res, next) {
 	}
 });
 
+<<<<<<< HEAD:lib/OAuth.js
 module.exports = app;
+=======
+router.use('/heartrate', require('./heartrate'));
+
+module.exports = router;
+>>>>>>> 931d3f1c3f1bbd01e104fdd4213bc9099c8609d6:routes/oauth/index.js
