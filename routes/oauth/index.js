@@ -3,7 +3,7 @@ var querystring = require('querystring');
 
 router.use(function(req, res, next) {
 	if (!req.cookies.clientId || !req.cookies.consumerKey || !req.cookies.consumerSecret) {
-		res.redirect('appinfo');
+		res.redirect('/appinfo');
 	} else if (!req.cookies.authToken) { 
 		var fitbitAuthData = querystring.stringify({
 			client_id: req.cookies.clientId,
