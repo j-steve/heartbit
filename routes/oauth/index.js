@@ -19,10 +19,6 @@ router.use(function(req, res, next) {
 	}
 });
 
-<<<<<<< HEAD:lib/OAuth.js
-module.exports = app;
-=======
 router.use('/heartrate', require('./heartrate'));
 
 module.exports = router;
->>>>>>> 931d3f1c3f1bbd01e104fdd4213bc9099c8609d6:routes/oauth/index.js
