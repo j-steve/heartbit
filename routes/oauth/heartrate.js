@@ -1,8 +1,12 @@
 var router = require('express').Router();
 var request = require('request');
 
-/* GET home page. */
+
 router.get('/', function(req, res, next) {
+	res.render('heartrate');
+});
+
+router.post('/', function(req, res, next) {
 	var targetDate = new Date();
 	targetDate.setDate(targetDate.getDate()-5);
 	var dateStr = targetDate.toISOString().substr(0, 10);
@@ -16,8 +20,6 @@ router.get('/', function(req, res, next) {
 		res.locals.heartrateData = JSON.stringify(JSON.parse(body), null, 2);
 		res.render('heartrate');
 	});
-	
-	
 });
 
 module.exports = router;
