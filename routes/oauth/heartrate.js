@@ -15,9 +15,12 @@ router.post('/', function(req, res, next) {
 	request.get(options, function(err, response, body) {
 		if (err) {return next(err);}
 		if (response.statusCode !== 200) {return next(body);}
-		res.locals.heartrateData = JSON.stringify(JSON.parse(body), null, 2);
-		res.render('heartrate', {dateStart});
+		res.render('heartrate', {dateStart, heartrateData: jsonPrettify(body)});
 	});
 });
+
+function jsonPrettify(data) {
+	return JSON.stringify(JSON.parse(data), null, 2);
+}
 
 module.exports = router;
