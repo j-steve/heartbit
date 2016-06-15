@@ -3,15 +3,13 @@ extends layout
 block content
 	style.
 		label input {display:block;}
-		
+	
+	- var today = new Date().toISOString().substr(0, 10)
 	form.content(method="POST")
 		h3= "Heartrate"
 		label
 			span="From"
-			input(type="date", name="dateStart" value=new Date().toISOString().substr(0, 10))
-		label
-			span="To"
-			input(type="date", name="dateEnd" value=new Date().toISOString().substr(0, 10))
+			input(type="date", name="dateStart", value=dateStart || today, max=today)
 		input(type="submit", value="Go")
 		pre= heartrateData
 				
