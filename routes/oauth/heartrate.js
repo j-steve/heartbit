@@ -1,26 +1,37 @@
-var router = require('express').Router();
-var request = require('request');
-
+'use strict';
+const router = require('express').Router();
+const request = require('request');
+const DB = require('../../models/DB');
 
 router.get('/', function(req, res, next) {
 	res.render('heartrate');
 });
 
 router.post('/', function(req, res, next) {
-	var dateStart = req.body.dateStart;
-	var options = {
+	const dateStart = req.body.dateStart;
+	const options = {
 		url: `https://api.fitbit.com/1/user/-/activities/heart/date/${dateStart}/1d/1sec.json`,
 		headers: {'Authorization': req.cookies.authToken}
 	};
 	request.get(options, function(err, response, body) {
-		if (err) {return next(err);}
-		if (response.statusCode !== 200) {return next(body);}
-		res.render('heartrate', {dateStart, heartrateData: jsonPrettify(body)});
+		if (err) {
+			next(err);
+		} else if (response.statusCode !== 200) {
+			next(body);
+		} else {
+			const data = JSON.parse(body);
+			processHeartData(data['activities-heart-intraday']['dataset']);
+			res.render('heartrate', {dateStart, heartrateData: JSON.stringify(data, null, 2)});	
+		}
 	});
 });
 
-function jsonPrettify(data) {
-	return JSON.stringify(JSON.parse(data), null, 2);
+function processHeartData(heartData) {
+	const inserts = [];
+	for (let heartrate of heartData) {
+		inserts.push([heartrate.time, heartrate.value]);
+	}
+	DB.batchInsert('heartrate', ['timestamp', 'bpm'], inserts);
 }
 
 module.exports = router;

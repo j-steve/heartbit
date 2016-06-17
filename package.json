@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node bin/server.js"
+    "start": "node --es_staging bin/server.js"
   },
   "dependencies": {
     "body-parser": "1.13.x",
@@ -11,12 +11,13 @@
     "debug": "2.2.x",
     "express": "4.13.x",
     "jade": "1.11.x",
-    "less-middleware": "1.0.x",
+    "less-middleware": "latest",
     "morgan": "1.6.x",
     "serve-favicon": "2.3.x",
-	"request": "2.72.x",
-	"btoa": "1.1.x",
-	"bluebird": "3.3.x",
-	"si-file": "latest"
+    "request": "2.72.x",
+    "btoa": "latest",
+    "bluebird": "latest",
+    "si-file": "latest",
+    "mysql": "latest"
   }
 }

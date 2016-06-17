@@ -1,7 +1,8 @@
-var Promise = require('bluebird');
-var MySQL = require('mysql');
+'use strict';
+const Promise = require('bluebird');
+const MySQL = require('mysql');
 
-var pool = MySQL.createPool({
+const pool = MySQL.createPool({
   host     : 'heartbit.cqpasazcowgm.us-west-2.rds.amazonaws.com',
   user     : 'heartbit_admin',
   password : 'adminPass',
