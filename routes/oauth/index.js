@@ -11,7 +11,7 @@ router.use(function(req, res, next) {
 			scope: 'heartrate',
 			redirect_uri: req.protocol + '://' + req.get('host') + '/auth',
 			expires_in: 2592000,
-			state: req.originalUrl
+			state: req.baseUrl + req.url
 		});
 		res.redirect('https://www.fitbit.com/oauth2/authorize?' + fitbitAuthData);
 	} else {
